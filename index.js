@@ -40,6 +40,10 @@ async function run() {
         if (keyword){
           query.productName = {$regex: keyword, $options: 'i'};
         }
+        // brand filtering
+        if(brand){
+          query.brandName = {$regex: brand, $options: 'i'};
+        }
         
 
         const products = await productCollections.find(query).toArray();
