@@ -44,7 +44,14 @@ async function run() {
         if(brand){
           query.brandName = {$regex: brand, $options: 'i'};
         }
-        
+        // category filtering
+        if(category){
+          query.productCategory = {$regex: category, $options: 'i'}
+        }
+        // price filtering
+        if(maxPrice !== 0 || maxPrice !== Infinity){
+          query.productPrice = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+        }
 
         const products = await productCollections.find(query).toArray();
 
