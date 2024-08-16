@@ -30,7 +30,7 @@ async function run() {
 
     app.get('/products', async (req, res) => {
       const {
-        page = 1, limit = 9, keyword = '', brand = '', category = '', minPrice = 0, maxPrice = Infinity, sort = ''
+        page = 1, limit = 9, keyword = ' ', brand = '', category = '', minPrice = 0, maxPrice = Infinity, sort = ''
       } = req.query;
 
       try {
@@ -49,10 +49,15 @@ async function run() {
           query.productCategory = {$regex: category, $options: 'i'}
         }
         // price filtering
-        if(maxPrice !== 0 || maxPrice !== Infinity){
-          query.productPrice = { $gte: parseInt(minPrice), $lte: parseInt(maxPrice) };
+        let min = parseFloat(minPrice);
+        let max = parseFloat(maxPrice);
+        if(!isNaN(min) && !isNaN(max)){
+          query.productPrice = {$gte: min, $lte: max}
+        } else if(!isNaN(min)){
+          query.productPrice = {$gte: min}
+        } else if(!isNaN(max)){
+          query.productPrice = {$lte: max}
         }
-
         const products = await productCollections.find(query).toArray();
 
 
