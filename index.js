@@ -58,7 +58,7 @@ async function run() {
         } else if(!isNaN(max)){
           query.productPrice = {$lte: max}
         }
-        const products = await productCollections.find(query).toArray();
+        const products = await productCollections.find(query).skip((page - 1) * limit).limit(parseInt(limit)).toArray();
 
 
         res.json({
