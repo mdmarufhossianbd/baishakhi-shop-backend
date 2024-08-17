@@ -78,7 +78,6 @@ async function run() {
         }
 
         const products = await productCollection.find(query).sort(sortOption).skip((page - 1) * limit).limit(parseInt(limit)).toArray();
-        // const products = await productCollection.find(query).skip((page - 1) * limit).limit(parseInt(limit)).toArray();
         const total = await productCollection.estimatedDocumentCount(query);
 
         res.json({
@@ -95,20 +94,6 @@ async function run() {
       }
     });
 
-    app.get('/all-products', async (req, res) => {
-      const {
-        keyword = ''
-      } = req.query
-      let query = {}
-      if (keyword) {
-        query.productName = {
-          $regex: keyword,
-          $options: 'i'
-        };
-      }
-      const result = await productCollection.find(query).toArray();
-      res.json(result)
-    })
 
 
     // Send a ping to confirm a successful connection
